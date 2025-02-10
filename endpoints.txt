@@ -1,0 +1,19 @@
+https://www.selenium.dev/documentation/grid/advanced_features/endpoints/
+
+ELIMINAR NODO COLGADO
+
+Ejecutar desde caulquier pod del cluster:
+
+pod_name=<POD_NAME> "selenium-router-deployment-dbfd44b84-nwwj7"
+id=<ID_NODO>"402b748d0341086a398654e8645e8049"
+ip=<IP_INTERNA_NODO> "http://10.42.0.6:5555"
+
+kubectl exec -it ${pod_name} -- curl  --request DELETE "${ip}/se/grid/node/session/${id}" --header 'X-REGISTRATION-SECRET;'
+
+
+
+pod_name="selenium-router-deployment-dbfd44b84-nwwj7"
+id="141997480466e40669ee5fccf9fad6eb"
+ip="http://10.39.0.7:5555"
+
+kubectl exec -it ${pod_name} -- curl  --request DELETE "${ip}/se/grid/node/session/${id}" --header 'X-REGISTRATION-SECRET;'

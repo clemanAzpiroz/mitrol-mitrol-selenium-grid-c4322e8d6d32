@@ -1,0 +1,11 @@
+{
+  "prettier/prettier": [
+    "error",
+    {
+      "singleQuote": false,
+      "parser": "flow",
+      "endOfLine": "auto",
+      "indent":  "2"
+    }
+  ]
+}
