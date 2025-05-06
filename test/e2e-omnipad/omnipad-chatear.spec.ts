@@ -50,40 +50,57 @@ test("Chat", async () => {
     await page[1].locator('div[data-ng-model="searchText"]')
   ).toBeDefined();
 
-  await page[1].click("text=Selenium1");
+  await page[1].click("text=Selenium001");
 
-  // Desaparecio por el momento -.-
-  // await expect(
-  //   chrome.page[1].locator("text=selenium1 Chat Iniciado").first()
-  // ).toBeVisible();
-  // await expect(
-  //   chrome.page[0].locator("text=selenium2 Chat Iniciado").first()
-  // ).toBeVisible();
+  // Esperar que el timer arranque desde 00:00:00
+  await page[0].waitForFunction(() => {
+    const el = document.querySelector('[data-testid="interaction-timer"]');
+    return el?.textContent?.trim() === "00:00:00";
+  }, null, { timeout: 10000 });
 
-  const t = 5;
+  // Esperar que haya contado al menos 1 segundo
+  await page[0].waitForFunction(() => {
+    const el = document.querySelector('[data-testid="interaction-timer"]');
+    if (!el) return false;
+    const [hh, mm, ss] = el.textContent.trim().split(":").map(Number);
+    return hh * 3600 + mm * 60 + ss >= 1;
+  }, null, { timeout: 10000 });
+
+  const t = 10;
   const timerInicial = parseStringToSeconds(await timerExtractor(page[0]));
+  console.log("Timer inicial:", timerInicial);
+
   await sleep(t * 1000);
+
   const timerFinal = parseStringToSeconds(await timerExtractor(page[0]));
+  console.log("Timer final:", timerFinal);
+
   expect(difference(timerInicial, timerFinal)).toBeGreaterThan(0);
   expect(difference(timerInicial, timerFinal)).toBeLessThan(t + 3);
 
   // 020 - Chatear - 5
 
-  await expect(page[1].locator(".sc-jEACwC").first()).toBeDisabled();
+  const boton = page[1]
+  .locator('div')
+  .filter({ hasText: /^Chat - InternoEn curso.*Chat Iniciado/ })
+  .getByRole('button')
+  .nth(4);
+
+  await expect(boton).toBeDisabled();
   await page[1]
-    .getByPlaceholder("Escriba su mensaje aqui...")
+    .getByPlaceholder("Mensaje")
     .first()
     .fill(texto);
 
-  await expect(page[1].locator(".sc-jEACwC").first()).toBeEnabled();
+  await expect(boton).toBeEnabled();
+  await boton.click();
 
-  await page[1].locator(".sc-jEACwC").click();
+
 
   // 020 - Chatear - 6
   await expect(
-    page[0].locator("text=1234567890_;:,;[{-}]+´áéíóú'!\"#$%&/()=?¿¡ñ)").first()
+    page[0].locator("text=una rueda es un bloque circular")
   ).toBeVisible();
-
   // TODO: Chequear timestamp.
 });
 
@@ -100,17 +117,19 @@ puede usarse para controlar la dirección de un barco o vehículo (por ejemplo, 
 liberar o transmitir energía (por ejemplo, el volante). Una rueda y un eje con fuerza aplicada para crear torque en un radio puede traducir esto en una fuerza diferente
 1234567890_;:,;[{-}]+´áéíóú'!"#$%&/()=?¿¡ñ)`;
 
+//await page[0].pause();
+
 const timerExtractor = async (page: Page) => {
-  const timerElements = await page.$$('[data-testid="interaction-timer"]');
+  await page.waitForSelector('[data-testid="interaction-timer"]', {
+    state: "visible",
+    timeout: 10000,
+  });
 
-  if (timerElements.length === 0) {
-    throw new Error("No timer element found");
-  }
+  const timerElement = await page.$('[data-testid="interaction-timer"]');
+  if (!timerElement) throw new Error("No timer element found");
 
-  const firstTimerElement = timerElements[0];
-  const timerText = await firstTimerElement.innerText();
-
-  return "00:" + timerText.trim();
+  const timerText = await timerElement.innerText();
+  return timerText.trim(); // formato esperado HH:MM:SS
 };
 
 //bg-gradient-265-11 py-1 px-2.5 rounded-lg text-white font-bold

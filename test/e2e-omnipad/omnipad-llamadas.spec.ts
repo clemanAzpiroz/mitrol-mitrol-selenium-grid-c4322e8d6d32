@@ -66,7 +66,7 @@ test("Llamadas", async () => {
     "button[class='undefined w-full flex items-center px-3 py-2 justify-center']"
   );
   await page[0].getByTestId("status-Disponible").click();
-
+  page[0].pause();
   await sleep(3 * 1000);
   await page[0].getByTestId("sidebar-call-btn").click();
   await sleep(3 * 1000);
@@ -175,31 +175,19 @@ test("Llamadas", async () => {
 
   // Determinar si la llamada fue muda o no
   const callStatus =
-    averageRMSFormatted < 19.9
+    averageRMSFormatted < 14.9
       ? "esta llamada FUE MUDA"
       : "esta llamada NO FUE MUDA";
   console.log(callStatus);
 
   await sleep(10 * 1000);
-  await page[1].pause();
-  await page[1].getByTestId("aswer-call").click();
-
-  await page[1].locator('h4:has-text("Nuevos")').isVisible();
-  //  await page[1].click('[data-testid="answer-call"]');
-  // await page[1].getByTestId("answer-call").click();
-  await page[1].locator("div:nth-child(4) > .p-1\\.5").isVisible();
-  await page[1].locator("div:nth-child(3) > .p-1\\.5").isVisible();
+  await page[1].getByTestId("answer-call").click();
+  await page[1].locator("div:nth-child(4) > .p-1\\.5").click();
+  await page[1].locator("div:nth-child(4) > .p-1\\.5").click();
+  await page[1].locator("div:nth-child(3) > .p-1\\.5").click();
+  await page[1].locator("div:nth-child(3) > .p-1\\.5").click();
   await page[1].locator(".flex > div > div > .p-1\\.5").first().click();
   await page[1].getByPlaceholder("Destino").press("Escape");
-  await page[1]
-    .locator("div")
-    .filter({ hasText: /^Campaña:Llamada Interna$/ })
-    .getByRole("button")
-    .nth(1)
-    .click();
-  await page[1].getByTestId("input-destination-modal").press("Escape");
-
-
   await page[1]
     .locator("div")
     .filter({ hasText: /^Campaña:Llamada Interna$/ })
@@ -208,18 +196,20 @@ test("Llamadas", async () => {
     .click();
   await page[1].getByRole("button", { name: "1" }).click();
   await page[1].getByRole("button", { name: "2" }).click();
-  await page[1].getByRole("button", { name: "2" }).click();
+  await page[1].getByRole("button", { name: "3" }).click();
   await page[1].getByRole("button", { name: "4" }).click();
   await page[1].getByRole("button", { name: "5" }).click();
   await page[1].getByRole("button", { name: "6" }).click();
   await page[1].getByRole("button", { name: "7" }).click();
   await page[1].getByRole("button", { name: "8" }).click();
   await page[1].getByRole("button", { name: "9" }).click();
+  await page[1].getByRole("button", { name: "*" }).click();
   await page[1].getByRole("button", { name: "0" }).nth(1).click();
   await page[1].getByRole("button", { name: "#" }).click();
+  await page[1].locator("div:nth-child(2) > div > button").first().click();
+  await page[1].locator("div:nth-child(5) > .p-1\\.5").click();
+  await page[1].getByRole("link").nth(3).click();
 
-  await page[0].pause();
-  await page[1].pause();
 
   await page[1].getByText("En curso").click();
   await page[1].locator("div:nth-child(4) > .p-1\\.5").click();

@@ -68,14 +68,13 @@ test("Login in y Login out", async () => {
   await logIn(page, user[index]);
 
   // Chequeo inicio sesión correcto. ${user[index]}
-  //await page.pause();
   /*await expect(
     page.locator(
       "span.w-full.h-full.flex.justify-center.items-center.rounded-full.font-semibold.text-black.uppercase.select-none"
     )
   ).toContainText("S5");
   */
-  await page.getByRole("button").click();
+  await page.getByRole("button").nth(1).click();
   //await page.click("sidebar-handler-btn");
 
   await expect(page.locator("text=Selenium5").first()).toBeVisible();//cuando corrijan lo de mayusc, reemplazar Selenium5 por ${user[index]}
