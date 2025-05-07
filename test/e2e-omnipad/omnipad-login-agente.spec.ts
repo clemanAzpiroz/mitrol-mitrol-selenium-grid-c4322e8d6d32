@@ -81,7 +81,7 @@ test("Login in y Login out", async () => {
 
   // Cerrando sesion - Abriendo dropdown
   await page.getByRole("button", { name: "No disponible" }).click();
-  await page.getByRole("button", { name: "Cerrar sesión" }).click();
+  await page.getByRole("button", { name: "Salir" }).click();
 
   // Chequeo cierre de sesion correcto
   if (version > 0) {

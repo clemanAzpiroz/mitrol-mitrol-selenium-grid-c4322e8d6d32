@@ -44,8 +44,11 @@ test("Cambio de Estado", async () => {
   );
 
   // Estado Inicial
+  await page.getByRole('button').nth(1).click();
   await page.pause();
-  const status = await page.locator(".user-current-status").innerText();
+  const status = await page
+    .locator('[data-testid="agent-status-selector-uncollapsed"]')
+    .innerText();
   expect(status).toContain("No Disponible");
   await testTemporizadorDisponible(page, "No Disponible", 5);
 

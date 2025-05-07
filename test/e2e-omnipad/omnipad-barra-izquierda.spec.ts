@@ -32,24 +32,24 @@ test("Barra-izquierda", async () => {
 
   // Iniciando con un usuario y contraseña validos.
   await logIn(page, users[usuario]);
-
-  await page.getByRole("button").click();
+  
+  await page.getByRole("button").nth(1).click();
   // Chequeo inicio sesión correcto.
   await expect(page.locator("text=Selenium17").first()).toBeVisible(); //cuando corrijan lo de mayusc, reemplazar Selenium5 por ${user[index]}
   await expect(page.locator("text=No disponible").nth(0)).toBeVisible();
   await expect(page.locator("text=No disponible").nth(1)).toBeVisible();
 
   await expect(
-    page.locator("div").filter({ hasText: /^Resultados de gestión$/ })
+    page.locator("div").filter({ hasText: "Resultados de gestión" }).nth(3)
   ).toBeVisible();
   await expect(
     page.locator("div").filter({ hasText: "Interacciones" }).nth(3)
   ).toBeVisible();
   await expect(
-    page.locator("div").filter({ hasText: /^Campañas$/ })
+    page.locator("div").filter({ hasText: "Campañas" }).nth(3)
   ).toBeVisible();
   await expect(
-    page.locator("div").filter({ hasText: /^Tiempos$/ })
+    page.locator("div").filter({ hasText: "Tiempos" }).nth(3)
   ).toBeVisible();
 
   //Abre la pestana Preview
@@ -63,12 +63,12 @@ test("Barra-izquierda", async () => {
   await page.getByTestId("sidebar-call-btn").click();
   await expect(page.getByPlaceholder("Destino")).toBeEditable();
   await page.locator("form").getByRole("button").click();
-
+  await page.pause();
   //Abre la pestana Chatear
   await page.getByTestId("sidebar-chat-btn").click();
   await expect(page.getByPlaceholder("Buscar...")).toBeEditable;
-  page.keyboard.press("Escape");
-
+  //page.keyboard.press("Escape"); NO FUNCIONA MAS, REVISAR SI MEJORA
+  await page.locator("div.backdrop").click(); //SOLUCION MOMENTANEA
   //Abre la pestana de Mensaje Interno
   /*await page.locator("a[title='Mensaje Interno']").first().click();
   await sleep(3 * 1000);
@@ -129,15 +129,15 @@ test("Barra-izquierda", async () => {
     "Estadísticas"
   );
   await expect(
-    page.locator("div").filter({ hasText: /^Resultados de gestión$/ })
+    page.locator("div").filter({ hasText: "Resultados de gestión" }).nth(3)
   ).toBeVisible();
   await expect(
     page.locator("div").filter({ hasText: "Interacciones" }).nth(3)
   ).toBeVisible();
   await expect(
-    page.locator("div").filter({ hasText: /^Campañas$/ })
+    page.locator("div").filter({ hasText: "Campañas" }).nth(3)
   ).toBeVisible();
   await expect(
-    page.locator("div").filter({ hasText: /^Tiempos$/ })
+    page.locator("div").filter({ hasText: "Tiempos" }).nth(3)
   ).toBeVisible();
 });

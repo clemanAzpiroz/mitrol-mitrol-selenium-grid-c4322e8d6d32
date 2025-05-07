@@ -38,7 +38,7 @@ test("Mensaje Interno", async () => {
         await InicioDeSesionMultipleOmnipad(page, "OQA4", users, usuario + i)
     )
   );
-
+  await page[1].pause();
   await page[1].click("text=Mensaje Interno");
 
   await page[1].click(
